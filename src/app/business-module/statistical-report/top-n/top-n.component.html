@@ -1,0 +1,85 @@
+<div class="odn-device-resources" [appBarProgress]="ProgressShow">
+  <!--选择区域-->
+  <span class="select-area-statistical" [title]="areaName?areaName:statisticalLanguage.selectArea"
+        [class.placeholder]="areaName?false:true"
+        (click)="showAreaSelect()">{{areaName ? areaName : statisticalLanguage.selectArea}}</span>
+  <nz-select *ngIf="pageTypeTitle !==ConstValue.TopPort"  [(ngModel)]="radioValue" [nzPlaceHolder]="statisticalLanguage.deviceType"
+              class="margin-right10 width-170">
+    <nz-option *ngFor="let item of radioSelectInfo" [nzDisabled]="item.isDisable" [nzLabel]="item.label"
+               [nzValue]="item.code"></nz-option>
+  </nz-select>
+  <nz-select *ngIf="pageTypeTitle ===ConstValue.TopSensor" [(ngModel)]="radioSensor" [nzPlaceHolder]="statisticalLanguage.selectSensor"
+              class="margin-right10 width-170">
+    <nz-option *ngFor="let item of radioSensorSelectInfo" [nzLabel]="item.label"
+               [nzValue]="item.code"></nz-option>
+  </nz-select>
+  <!--<check-select-input [placeholder]="statisticalLanguage.selectAlarm" *ngIf="pageTypeTitle===ConstValue.TopAlarm"-->
+                      <!--class="margin-right10 check-select-all" [isAllChecked]="true"-->
+                      <!--[(ngModel)]="alarmList" [checkList]="selectInfo"></check-select-input>-->
+  <span class="select-area-statistical" *ngIf="pageTypeTitle===ConstValue.TopAlarm " [title]=" alarmName? alarmName: language.alarmName"
+        [class.placeholder]="alarmName?false:true"
+        (click)="showAlarmNameSelect()">{{alarmName ? alarmName : language.alarmName}}</span>
+  <!--设施类型-->
+  <check-select-input [placeholder]="statisticalLanguage.deviceType" *ngIf="pageTypeTitle===ConstValue.TopPort"
+                      class="margin-right10 check-select-all" [isAllChecked]="true"
+                      [(ngModel)]="deviceList" [checkList]="selectInfo"></check-select-input>
+  <nz-range-picker *ngIf="pageTypeTitle ===ConstValue.TopAlarm||pageTypeTitle ===ConstValue.TopWorkOrder||pageTypeTitle ===ConstValue.TopLock"
+                   class="margin-right10 width-286"
+                   [(ngModel)]="rangDateValue"
+                   [nzDisabledDate]="disabledEndDate"
+                   (ngModelChange)="rangValueChange($event)"
+                   (nzOnOpenChange)="onOpenChange($event)"
+  ></nz-range-picker>
+ <!--统计数量-->
+  <span class="top-statistical-num">{{statisticalLanguage.statisticalNumber}}
+    <nz-select [(ngModel)]="statisticalNumber"  class="margin-right10 width-70">
+      <nz-option [nzLabel]="ConstValue.Ten" [nzValue]="ConstValue.Ten"></nz-option>
+      <nz-option [nzLabel]="ConstValue.Twenty" [nzValue]="ConstValue.Twenty"></nz-option>
+     </nz-select>
+  </span>
+  <!--统计-->
+  <button type="button"
+          class="link-button" nz-button
+          nzType="primary"
+          [disabled]="isDisable()"
+          (click)="statistical()">{{statisticalLanguage.statistical}}
+  </button>
+</div>
+<!--eChart-->
+<div *ngIf="hide" class="chart-top-box" >
+  <div *ngIf="pageTypeTitle === ConstValue.TopSensor">
+    <nz-switch [(ngModel)]="switchValue" (click)="clickSwitch(switchValue)"></nz-switch>
+    <span class="switch-lock" *ngIf="switchValue" >{{statisticalLanguage.top}}</span>
+    <span class="switch-lock" *ngIf="!switchValue">{{statisticalLanguage.bottom}}</span>
+  </div>
+  <div class="barChart" *ngIf="hasData">
+    <app-echart-column class="chart-top-left"
+                       (chartInstance)="getBarChartInstance($event)"></app-echart-column>
+    <xc-table
+              class="table-chart-top"
+              [dataSet]="_dataset"
+              [pageBean]="pageBean"
+              [tableConfig]="tableConfig"
+              (pageChange)="pageChange($event)">
+    </xc-table>
+  </div>
+</div>
+<div *ngIf="firstSelect"  class="select-height"></div>
+<!--区域选择器-->
+<xc-tree-selector
+  [(xcVisible)]="isVisible"
+  (selectDataChange)="selectDataChange($event)"
+  [treeSelectorConfig]="treeSelectorConfig">
+</xc-tree-selector>
+
+<ng-template #deviceTemp let-data="data">
+  <div class="hidden device-name-select" (click)="goDevice(data)">{{data.deviceName}}</div>
+</ng-template>
+
+<!--  告警名称选择弹窗-->
+<app-alarm-name-select *ngIf="alarmNameSelectVisible"
+                       [(alarmNameSelectVisible)]="alarmNameSelectVisible"
+                       (selectDataChange)="onSelectAlarmName($event)"
+                       [selectAlarms] = "selectAlarms"
+>
+</app-alarm-name-select>

@@ -1,0 +1,105 @@
+@import "../../../../style-module/config";
+
+$length: 110px;
+.table-container {
+  .inspect-statistics-item-title {
+    height: 30px;
+    line-height: 30px;
+    font-weight: bold;
+    font-size: 14px;
+    color: $title-color;
+  }
+
+  .inspect-statistics-item-chart {
+    flex: 1;
+    display: flex;
+    background-color: white;
+    min-width: 240px;
+    height: 160px;
+
+    .pie-chart {
+      width: 100%;
+      height: 100%;
+    }
+
+    .no-data {
+      width: 100%;
+      line-height: 140px;
+      text-align: center;
+    }
+  }
+
+  .status-circle {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 20px;
+
+    .circle-item {
+      position: relative;
+      width: $length;
+      height: $length;
+
+      .circle-text {
+        display: flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: $length;
+        height: $length;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+      }
+
+      canvas {
+        width: $length;
+        height: $length;
+      }
+
+      &:nth-child(1) {
+        color: $completed-color;
+      }
+
+      &:nth-child(2) {
+        color: $return-back-color;
+      }
+    }
+  }
+
+  .demo-chart {
+    width: 100%;
+    height: 140px;
+  }
+
+  .status-temp {
+    margin-right: 6px;
+  }
+
+  .area-name {
+    width: 100%;
+    height: 22px;
+    line-height: 22px;
+    padding: 0 11px;
+    cursor: pointer;
+  }
+
+  .see-table {
+    position: relative;
+    top: -25px;
+  }
+}
+
+.order-warp {
+  background: $bg-c;
+  padding: 10px 0;
+
+  .gutter-box {
+    background: $bg-c-w;
+    height: 100%;
+    padding: 0 16px 20px 16px;
+  }
+}
+

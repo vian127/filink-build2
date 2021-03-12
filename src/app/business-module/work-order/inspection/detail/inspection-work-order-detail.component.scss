@@ -1,0 +1,26 @@
+@import "../../../../style-module/config.scss";
+.in-container {
+  padding: 0 0 20px 16px;
+
+  .link-button{
+    margin-right: 20px;
+  }
+
+  .area-name {
+    outline: none;
+    cursor: default;
+    &:hover{
+      border-color: $color;
+    }
+  }
+
+  .open-button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: $bg-c-w;
+  }
+  .order-btn{
+    margin-top: 20px;
+  }
+}

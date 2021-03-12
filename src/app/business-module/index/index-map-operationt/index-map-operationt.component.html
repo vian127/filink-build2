@@ -1,0 +1,9 @@
+<!--坐标调整-->
+<app-adjust-coordinates  (addCoordinatesEventEmitter)="adjustCoordinatesChange()"></app-adjust-coordinates>
+
+<!--地图分层-->
+<app-facility-show (isShowCardEventEmitter)="facilityLayeredChange()"></app-facility-show>
+
+<!--添加分组-->
+<app-select-grouping *ngIf="roleSelect"
+                     (addGroupingEventEmitter)="selectGroupChange()"></app-select-grouping>

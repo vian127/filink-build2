@@ -1,0 +1,88 @@
+<div class="box" [appBarProgress]="ProgressShow">
+  <div class="top">
+    <div class="top-select-float margin-right10" *ngIf="selectAreaShow">
+        <span class="select-area-statistical" [title]="areaName?areaName:wLanguage.selectArea"
+              [class.placeholder]="!areaName"
+              (click)="showAreaSelector()">{{areaName ? areaName : wLanguage.selectArea}}
+        </span>
+    </div>
+    <div class="top-select-float margin-right10" *ngIf="selectUnitShow">
+        <span class="select-unit" [title]="selectUnitName?selectUnitName:wLanguage.selectUnit"
+              [class.placeholder]="!selectUnitName"
+              (click)="showUnitSelector()">{{selectUnitName?selectUnitName:wLanguage.selectUnit}}
+        </span>
+    </div>
+    <div  class="top-select-float" *ngIf="checkBoxSelectShow">
+      <check-select-input [placeholder]="wLanguage.deviceType" [isAllChecked]="true" [(ngModel)]="deviceTypeList"
+                          [checkList]="selectInfo"></check-select-input>
+    </div>
+    <div style="float: left;" *ngIf="radioSelectShow">
+      <nz-select style="width: 120px;"
+                 nzPlaceHolder="{{wLanguage.deviceType}}"
+                 nzAllowClear
+                 [(ngModel)]="deviceTypeData">
+        <nz-option *ngFor="let option of selectInfo" [nzLabel]="option.label" [nzValue]="option.code"></nz-option>
+      </nz-select>
+    </div>
+    <div  class="top-select-float margin-left10" *ngIf="dateRangeShow">
+      <nz-range-picker [nzDisabledDate]="disabledEndDate" [(ngModel)]="dateRange" (ngModelChange)="onChange($event)"></nz-range-picker>
+    </div>
+    <div  class="margin-left10 top-select-float">
+      <button type="button" class="link-button" nz-button nzType="primary"
+              [disabled]="((areaData.length<=0&&!selectUnitShow||selectUnitIdData.length<=0&&selectUnitShow)||(!selectUnitShow&&(!deviceTypeData&&!checkBoxSelectShow||deviceTypeList.length<=0&&checkBoxSelectShow))||(dateRange.length<=0&&dateRangeShow))"
+              (click)="statistical()">{{wLanguage.statistical}}</button>
+    </div>
+  </div>
+  <!-- tab栏 -->
+  <div class="device-select" *ngIf="!hide&&showTab">
+    <ul>
+      <li *ngFor="let item of selectDeviceTypeList"
+          [class.active]="item === deviceActive"
+          (click)="getDeviceType(item);deviceActive = item">
+        {{item.label}}
+      </li>
+    </ul>
+  </div>
+  <!-- 统计区域 -->
+  <div *ngIf="!hide&&!lineChart">
+    <div class="barChart">
+      <app-echart-column class="clear-device-type margin-right10"
+                         (chartInstance)="getRingChartInstance($event)">
+      </app-echart-column>
+      <app-echart-column  class="clear-device-type"
+                          (chartInstance)="getBarChartInstance($event)">
+      </app-echart-column>
+    </div>
+    <br>
+    <xc-table
+      [dataSet]="_dataSet"
+      [pageBean]="pageBean"
+      [tableConfig]="tableConfig"
+      (pageChange)="pageChange($event)">
+    </xc-table>
+  </div>
+
+  <div *ngIf="!hide&&lineChart">
+    <div class="lineChart">
+      <app-echart-column
+        (chartInstance)="getLineChartInstance($event)">
+      </app-echart-column>
+    </div>
+    <br>
+  </div>
+
+</div>
+<div *ngIf="hide" class="select-height"></div>
+<!--区域选择器-->
+<xc-tree-selector
+  [(xcVisible)]="isAreaVisible"
+  (selectDataChange)="selectDataChange($event)"
+  [treeSelectorConfig]="treeSelectorConfig">
+</xc-tree-selector>
+
+<!--责任单位选择器-->
+<xc-tree-selector
+  [(xcVisible)]="isUnitVisible"
+  (selectDataChange)="selectUnitDataChange($event)"
+  [treeSelectorConfig]="treeSelectorConfig">
+</xc-tree-selector>
